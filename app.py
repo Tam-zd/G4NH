@@ -889,6 +889,63 @@ def battle_tab(th, value_A, principal, interest_A, value_B, loan_cost, interest_
     )
 
 
+def battle_tab_renewal(th, value_A, value_B, last_principal, extra_days, non_term_rate, term_rate,
+                        withdrawal_date, maturity_full):
+    """So sánh riêng cho trường hợp TÁI TỤC: đang ở giữa kỳ tái tục hiện tại (kỳ lẻ chưa
+    đủ hạn), khách đang cân nhắc rút NGAY hay CHỜ THÊM vài ngày cho đủ kỳ mới rút."""
+    a_wins = value_A >= value_B
+    st.markdown('<div class="battle-wrap">', unsafe_allow_html=True)
+    colA, colVS, colB = st.columns([1, 0.18, 1])
+    with colA:
+        crown = '<div class="winner-crown">👑</div>' if a_wins else ""
+        st.markdown(
+            f"""<div class="battle-card {'winner' if a_wins else ''}">{crown}
+            <div class="bc-tag">PHƯƠNG ÁN A</div>
+            <div class="bc-title">🏃 Rút ngay bây giờ</div>
+            <div class="bc-value">{format_money(value_A)}</div>
+            <div class="bc-line">Ngày rút: {withdrawal_date.strftime('%d/%m/%Y')}</div>
+            <div class="bc-line">Phần dở dang của kỳ hiện tại hưởng lãi không kỳ hạn ({non_term_rate:.2f}%/năm)</div>
+            </div>""",
+            unsafe_allow_html=True,
+        )
+    with colVS:
+        st.markdown('<div style="height:60px;"></div><div class="battle-vs">VS</div>', unsafe_allow_html=True)
+    with colB:
+        crown = '<div class="winner-crown">👑</div>' if not a_wins else ""
+        st.markdown(
+            f"""<div class="battle-card {'winner' if not a_wins else ''}">{crown}
+            <div class="bc-tag">PHƯƠNG ÁN B</div>
+            <div class="bc-title">⏳ Chờ thêm {extra_days} ngày cho đủ kỳ</div>
+            <div class="bc-value">{format_money(value_B)}</div>
+            <div class="bc-line">Ngày đáo hạn kỳ hiện tại: {maturity_full.strftime('%d/%m/%Y')}</div>
+            <div class="bc-line">Cả kỳ được hưởng lãi có kỳ hạn ({term_rate:.2f}%/năm)</div>
+            </div>""",
+            unsafe_allow_html=True,
+        )
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    diff = value_B - value_A
+    if diff > 0:
+        st.markdown(
+            f"""<div class="verdict-box">✅ <b>Nên CHỜ THÊM {extra_days} ngày</b> rồi mới rút.
+            Lợi hơn khoảng <b>{format_money(diff)}</b> vì cả kỳ được hưởng lãi có kỳ hạn
+            ({term_rate:.2f}%/năm) thay vì lãi không kỳ hạn ({non_term_rate:.2f}%/năm) cho phần dở dang.</div>""",
+            unsafe_allow_html=True,
+        )
+    elif diff < 0:
+        st.markdown(
+            f"""<div class="verdict-box neg">⚠️ <b>Nên RÚT NGAY</b>, không cần chờ thêm.
+            Chờ thêm {extra_days} ngày thiệt hơn khoảng <b>{format_money(-diff)}</b> trong trường hợp này.</div>""",
+            unsafe_allow_html=True,
+        )
+    else:
+        st.info("➖ Hai phương án cho kết quả tương đương nhau.")
+    st.caption(
+        f"💡 So sánh dựa trên gốc đầu kỳ hiện tại {format_money(last_principal)} (đã bao gồm lãi nhập gốc "
+        "từ các lần tái tục trước đó). Số ngày chờ thêm được tính đến đúng ngày đáo hạn của kỳ đang gửi."
+    )
+
+
 # ============================================================
 # HERO BANNER
 # ============================================================
@@ -970,6 +1027,7 @@ with col_left:
             "Điều chỉnh bằng thanh trượt", min_value=0, max_value=5_000_000_000,
             value=int(st.session_state.so_tien_goc), step=1_000_000,
             key="slider_amount", on_change=_on_slider_change, label_visibility="collapsed",
+            format="%d ₫",
         )
 
         if st.session_state.so_tien_goc > 0:
@@ -1376,7 +1434,23 @@ with col_right:
                                        date_cols=["Ngày bắt đầu", "Ngày kết thúc"])
 
                 with tab3:
-                    st.info("Trường hợp tái tục tự động không áp dụng so sánh vay cầm cố vs rút trước hạn.")
+                    if last_full:
+                        st.info("✅ Kỳ hiện tại đã trọn vẹn tính đến ngày rút — không có phần dở dang để so sánh chờ thêm.")
+                    elif term_rate is None:
+                        st.info("Nhập **lãi suất có kỳ hạn** ở Bảng điều khiển rồi tính lại để xem so sánh.")
+                    else:
+                        last_start = last_p["Ngày bắt đầu"]
+                        last_principal = last_p["Gốc đầu kỳ"]
+                        maturity_full = last_start + relativedelta(months=term_months)
+                        extra_days = get_days(withdrawal_date, maturity_full)
+
+                        value_A = total  # rút ngay bây giờ (đã tính ở trên, gồm cả stub lãi không kỳ hạn)
+                        interest_full = simple_interest(last_principal, term_rate, get_days(last_start, maturity_full))
+                        value_B = (total - last_p["Tiền lãi"]) + interest_full  # thay lãi stub bằng lãi trọn kỳ
+
+                        st.markdown("##### ⚔️ Rút ngay vs Chờ thêm cho đủ kỳ tái tục hiện tại")
+                        battle_tab_renewal(TH, value_A, value_B, last_principal, extra_days,
+                                            non_term_rate, term_rate, withdrawal_date, maturity_full)
 
 
 # ============================================================
@@ -1394,9 +1468,9 @@ with st.expander("📖 Hướng dẫn sử dụng"):
 
     **4. Phương thức nhận lãi** — Nhận lãi trước / hàng tháng / cuối kỳ (chỉ áp dụng khi rút đúng ngày đáo hạn).
 
-    **5. Rút trước hạn** — toàn bộ thời gian được tính lại theo lãi suất không kỳ hạn.
+    **5. Rút trước hạn** — toàn bộ thời gian được tính lại theo lãi suất không kỳ hạn. Tab "So sánh thông minh" sẽ so sánh với phương án vay cầm cố sổ.
 
-    **6. Tự động tái tục** — nếu rút sau đáo hạn, hệ thống chia nhiều kỳ theo đúng kỳ hạn ban đầu; kỳ cuối rút giữa chừng dùng lãi suất không kỳ hạn.
+    **6. Tự động tái tục** — nếu rút sau đáo hạn, hệ thống chia nhiều kỳ theo đúng kỳ hạn ban đầu; kỳ cuối rút giữa chừng dùng lãi suất không kỳ hạn. Nếu kỳ cuối chưa trọn vẹn, tab "So sánh thông minh" sẽ so sánh **rút ngay** với **chờ thêm vài ngày cho đủ kỳ**.
 
     **7. Kết quả được giữ nguyên** cho đến khi bạn bấm lại **TÍNH TOÁN NGAY** — chuyển tab, đổi giao diện sáng/tối không làm mất kết quả.
 
