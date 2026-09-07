@@ -41,6 +41,7 @@ THEMES = {
         slider_track="rgba(30,62,98,0.14)",
         chip_bg="rgba(255,255,255,0.8)",
         expander_bg="rgba(255,255,255,0.65)",
+        color_scheme="light",
     ),
     "dark": dict(
         app_bg="linear-gradient(135deg, #0A0F1C 0%, #111A2E 100%)",
@@ -58,6 +59,7 @@ THEMES = {
         slider_track="rgba(255,255,255,0.12)",
         chip_bg="rgba(27,36,56,0.85)",
         expander_bg="rgba(19,26,46,0.6)",
+        color_scheme="dark",
     ),
 }
 
@@ -333,6 +335,231 @@ def build_css(th: dict) -> str:
     @media (min-width: 1000px) {{
         div[data-testid="column"]:first-child > div {{ position: sticky; top: 14px; }}
     }}
+    /* ========================================================
+       FIX UI LIGHT / DARK — Streamlit native widgets
+       Đặc biệt: DateInput, Selectbox, Slider, Button, bảng
+       ======================================================== */
+
+    /* Native browser color scheme: tránh trình duyệt tự đổi màu chữ
+       của input[type=date] khi app đang ở Dark Mode. */
+    :root {{ color-scheme: {th['color_scheme']}; }}
+    html {{ color-scheme: {th['color_scheme']} !important; }}
+
+    /* ---------- DATE INPUT ---------- */
+    .stDateInput,
+    .stDateInput > div,
+    .stDateInput [data-baseweb="input"],
+    .stDateInput [data-baseweb="input"] > div {{
+        background: {th['input_bg']} !important;
+    }}
+
+    .stDateInput input,
+    .stDateInput input[type="date"],
+    .stDateInput input[aria-label] {{
+        background-color: {th['input_bg']} !important;
+        color: {th['input_text']} !important;
+        -webkit-text-fill-color: {th['input_text']} !important;
+        caret-color: {th['input_text']} !important;
+        opacity: 1 !important;
+        text-shadow: none !important;
+        color-scheme: {th['color_scheme']} !important;
+    }}
+
+    .stDateInput input::placeholder {{
+        color: {th['placeholder']} !important;
+        -webkit-text-fill-color: {th['placeholder']} !important;
+        opacity: 1 !important;
+    }}
+
+    /* Nút xoá và icon lịch của DateInput */
+    .stDateInput button,
+    .stDateInput button svg {{
+        color: {th['muted']} !important;
+        fill: currentColor !important;
+        opacity: 1 !important;
+    }}
+    .stDateInput button:hover {{
+        background: {th['slider_track']} !important;
+    }}
+    .stDateInput input[type="date"]::-webkit-calendar-picker-indicator {{
+        opacity: 1 !important;
+        cursor: pointer;
+        filter: {('invert(1) brightness(1.7)' if False else 'none')};
+    }}
+
+    /* Popover / calendar của DateInput */
+    div[data-baseweb="popover"],
+    div[data-baseweb="calendar"],
+    div[role="dialog"] {{
+        color-scheme: {th['color_scheme']} !important;
+    }}
+    div[data-baseweb="popover"] [data-baseweb="calendar"],
+    div[data-baseweb="calendar"] {{
+        background: {th['input_bg']} !important;
+        color: {th['input_text']} !important;
+        border-color: {th['input_border']} !important;
+    }}
+    div[data-baseweb="calendar"] *,
+    div[data-baseweb="calendar"] button {{
+        color: {th['input_text']} !important;
+    }}
+    div[data-baseweb="calendar"] button:hover {{
+        background: {th['slider_track']} !important;
+    }}
+
+    /* ---------- SELECTBOX ---------- */
+    .stSelectbox [data-baseweb="select"],
+    .stSelectbox [data-baseweb="select"] > div,
+    .stSelectbox [data-baseweb="select"] > div > div {{
+        background: {th['input_bg']} !important;
+        color: {th['input_text']} !important;
+        border-color: {th['input_border']} !important;
+    }}
+    .stSelectbox [data-baseweb="select"] input {{
+        color: {th['input_text']} !important;
+        -webkit-text-fill-color: {th['input_text']} !important;
+    }}
+    .stSelectbox [data-baseweb="select"] span,
+    .stSelectbox [data-baseweb="select"] div[role="option"] {{
+        color: {th['input_text']} !important;
+    }}
+    ul[data-baseweb="menu"],
+    ul[data-baseweb="menu"] > li,
+    div[data-baseweb="popover"] ul {{
+        background: {th['input_bg']} !important;
+        color: {th['input_text']} !important;
+    }}
+    ul[data-baseweb="menu"] li[aria-selected="true"],
+    ul[data-baseweb="menu"] li:hover {{
+        background: {th['slider_track']} !important;
+        color: {th['input_text']} !important;
+    }}
+    .stSelectbox svg {{
+        color: {th['muted']} !important;
+        fill: currentColor !important;
+    }}
+
+    /* ---------- NUMBER / TEXT INPUT ---------- */
+    .stTextInput [data-baseweb="input"],
+    .stNumberInput [data-baseweb="input"],
+    .stTextArea [data-baseweb="base-input"],
+    .stTextArea textarea,
+    .stTextInput input,
+    .stNumberInput input {{
+        background: {th['input_bg']} !important;
+        color: {th['input_text']} !important;
+        -webkit-text-fill-color: {th['input_text']} !important;
+        border-color: {th['input_border']} !important;
+        opacity: 1 !important;
+    }}
+    .stTextInput input::placeholder,
+    .stNumberInput input::placeholder,
+    .stTextArea textarea::placeholder {{
+        color: {th['placeholder']} !important;
+        -webkit-text-fill-color: {th['placeholder']} !important;
+        opacity: 1 !important;
+    }}
+
+    /* ---------- SLIDER ---------- */
+    div[data-testid="stSlider"] {{ color: {th['text']} !important; }}
+    div[data-testid="stSlider"] label,
+    div[data-testid="stSlider"] p,
+    div[data-testid="stSlider"] span {{
+        color: {th['text']} !important;
+    }}
+    div[data-testid="stSlider"] [data-baseweb="slider"] > div {{
+        background: transparent !important;
+    }}
+    div[data-testid="stSlider"] [data-baseweb="slider"] > div > div {{
+        background: {th['slider_track']} !important;
+    }}
+    div[data-testid="stSlider"] [role="slider"] {{
+        background: {th['emerald']} !important;
+        border: 2px solid {th['emerald']} !important;
+        box-shadow: 0 0 0 3px {th['slider_track']} !important;
+    }}
+    div[data-testid="stSlider"] [data-testid="stThumbValue"],
+    div[data-testid="stSlider"] [data-testid="stSliderTickBarMin"],
+    div[data-testid="stSlider"] [data-testid="stSliderTickBarMax"] {{
+        color: {th['muted']} !important;
+        -webkit-text-fill-color: {th['muted']} !important;
+    }}
+
+    /* ---------- BUTTON ---------- */
+    .stButton > button,
+    .stDownloadButton > button {{
+        color: {th['sapphire']} !important;
+        background: {th['chip_bg']} !important;
+        border: 1px solid {th['input_border']} !important;
+        opacity: 1 !important;
+    }}
+    .stButton > button p,
+    .stButton > button span,
+    .stDownloadButton > button p,
+    .stDownloadButton > button span {{
+        color: inherit !important;
+        -webkit-text-fill-color: currentColor !important;
+    }}
+    .stButton > button:hover,
+    .stDownloadButton > button:hover {{
+        border-color: {th['emerald']} !important;
+        color: {th['emerald']} !important;
+    }}
+    .st-key-calc_btn .stButton > button,
+    .st-key-calc_btn .stButton > button p,
+    .st-key-calc_btn .stButton > button span {{
+        color: #FFFFFF !important;
+        -webkit-text-fill-color: #FFFFFF !important;
+    }}
+
+    /* ---------- TABS / EXPANDER / CHECKBOX / RADIO ---------- */
+    div[data-testid="stTabs"] button,
+    div[data-testid="stTabs"] button p,
+    div[data-testid="stTabs"] button span {{
+        color: {th['text']} !important;
+    }}
+    div[data-testid="stTabs"] button[aria-selected="true"],
+    div[data-testid="stTabs"] button[aria-selected="true"] p {{
+        color: {th['sapphire']} !important;
+    }}
+    div[data-testid="stExpander"] summary,
+    div[data-testid="stExpander"] summary span {{
+        color: {th['heading']} !important;
+    }}
+    div[role="radiogroup"] label,
+    div[role="radiogroup"] label p,
+    div[role="radiogroup"] label span {{
+        color: {th['text']} !important;
+    }}
+
+    /* ---------- BẢNG HTML ---------- */
+    .bank-table-wrap {{
+        background: {th['table_bg']} !important;
+        border-color: {th['table_border']} !important;
+    }}
+    table.bank-table,
+    table.bank-table thead,
+    table.bank-table tbody {{
+        background: {th['table_bg']} !important;
+        color: {th['text']} !important;
+    }}
+    table.bank-table thead th {{
+        background: {th['table_head_bg']} !important;
+        color: {th['heading']} !important;
+        border-color: {th['table_border']} !important;
+    }}
+    table.bank-table tbody td {{
+        background: transparent !important;
+        color: {th['text']} !important;
+        border-color: {th['table_border']} !important;
+    }}
+    table.bank-table tbody tr:nth-child(even) td {{
+        background: {th['table_row_alt']} !important;
+    }}
+    table.bank-table tbody tr:hover td {{
+        background: {th['slider_track']} !important;
+    }}
+
 </style>
 """
 
