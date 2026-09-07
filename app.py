@@ -1,5 +1,4 @@
 import re
-from datetime import date
 
 import streamlit as st
 from dateutil.relativedelta import relativedelta
@@ -124,16 +123,17 @@ def build_css(th: dict) -> str:
         color: white; display: flex; align-items: center; justify-content: center;
     }}
 
-    /* ---- Inputs: text_input, number_input, date_input, selectbox, textarea ---- */
-    .stTextInput input, .stNumberInput input, .stDateInput input,
+    /* ---- Inputs: text_input, number_input, selectbox, textarea ---- */
+    .stTextInput input, .stNumberInput input,
     .stSelectbox div[data-baseweb="select"] > div, textarea {{
         background: {th['input_bg']} !important;
         color: {th['input_text']} !important;
         border: 1px solid {th['input_border']} !important;
         border-radius: 10px !important;
     }}
-    .stTextInput input::placeholder, .stNumberInput input::placeholder,
-    .stDateInput input::placeholder {{ color: {th['placeholder']} !important; }}
+    .stTextInput input::placeholder, .stNumberInput input::placeholder {{
+        color: {th['placeholder']} !important;
+    }}
     .stSelectbox div[data-baseweb="select"] span {{ color: {th['input_text']} !important; }}
     ul[data-baseweb="menu"] {{ background: {th['input_bg']} !important; }}
     ul[data-baseweb="menu"] li {{ color: {th['input_text']} !important; }}
@@ -335,64 +335,43 @@ def build_css(th: dict) -> str:
     @media (min-width: 1000px) {{
         div[data-testid="column"]:first-child > div {{ position: sticky; top: 14px; }}
     }}
-    /* ========================================================
-       FIX UI LIGHT / DARK — Streamlit native widgets
-       Đặc biệt: DateInput, Selectbox, Slider, Button, bảng
-       ======================================================== */
 
-    /* Native browser color scheme: tránh trình duyệt tự đổi màu chữ
-       của input[type=date] khi app đang ở Dark Mode. */
+    /* ========================================================
+       DATE INPUT — khối CSS hợp nhất (fix mất chữ ở Dark Mode)
+       Trước đây có 3 khối rời rạc chồng chéo nhau; nay gộp lại
+       thành 1 khối duy nhất, dùng selector wildcard để chắc chắn
+       bắt được mọi lớp con do BaseWeb/Streamlit sinh ra.
+       ======================================================== */
     :root {{ color-scheme: {th['color_scheme']}; }}
     html {{ color-scheme: {th['color_scheme']} !important; }}
 
-    /* ---------- DATE INPUT ---------- */
-    .stDateInput,
-    .stDateInput > div,
-    .stDateInput [data-baseweb="input"],
-    .stDateInput [data-baseweb="input"] > div {{
-        background: {th['input_bg']} !important;
-    }}
-
-    .stDateInput input,
-    .stDateInput input[type="date"],
-    .stDateInput input[aria-label] {{
+    [data-testid="stDateInput"] * {{
         background-color: {th['input_bg']} !important;
         color: {th['input_text']} !important;
         -webkit-text-fill-color: {th['input_text']} !important;
-        caret-color: {th['input_text']} !important;
-        opacity: 1 !important;
-        text-shadow: none !important;
-        color-scheme: {th['color_scheme']} !important;
     }}
-
-    .stDateInput input::placeholder {{
+    [data-testid="stDateInput"] input::placeholder,
+    [data-testid="stDateInput"] input::-webkit-input-placeholder {{
         color: {th['placeholder']} !important;
         -webkit-text-fill-color: {th['placeholder']} !important;
         opacity: 1 !important;
     }}
-
-    /* Nút xoá và icon lịch của DateInput */
-    .stDateInput button,
-    .stDateInput button svg {{
-        color: {th['muted']} !important;
-        fill: currentColor !important;
-        opacity: 1 !important;
+    [data-testid="stDateInput"] svg {{
+        fill: {th['muted']} !important;
+        stroke: {th['muted']} !important;
+        background: transparent !important;
     }}
-    .stDateInput button:hover {{
+    [data-testid="stDateInput"] [data-baseweb="input"],
+    [data-testid="stDateInput"] [data-baseweb="base-input"] {{
+        border: 1px solid {th['input_border']} !important;
+        border-radius: 10px !important;
+        box-shadow: none !important;
+    }}
+    [data-testid="stDateInput"] button:hover {{
         background: {th['slider_track']} !important;
     }}
-    .stDateInput input[type="date"]::-webkit-calendar-picker-indicator {{
-        opacity: 1 !important;
-        cursor: pointer;
-        filter: {('invert(1) brightness(1.7)' if False else 'none')};
-    }}
 
-    /* Popover / calendar của DateInput */
-    div[data-baseweb="popover"],
-    div[data-baseweb="calendar"],
-    div[role="dialog"] {{
-        color-scheme: {th['color_scheme']} !important;
-    }}
+    /* Popover lịch khi mở */
     div[data-baseweb="popover"] [data-baseweb="calendar"],
     div[data-baseweb="calendar"] {{
         background: {th['input_bg']} !important;
@@ -407,97 +386,6 @@ def build_css(th: dict) -> str:
         background: {th['slider_track']} !important;
     }}
 
-    /* ========================================================
-       DATE INPUT — FINAL OVERRIDE
-       BaseWeb/Streamlit có thể đặt nền ở wrapper thay vì input.
-       Vì vậy ép nền + màu trên toàn bộ cấu trúc của DateInput.
-       Mục tiêu Dark Mode: ô ngày tháng dùng cùng nền xanh đen
-       #1B2438 như ô lãi suất/số tiền.
-       ======================================================== */
-    [data-testid="stDateInput"] [data-baseweb="input"],
-    [data-testid="stDateInput"] [data-baseweb="input"] > div,
-    [data-testid="stDateInput"] [data-baseweb="base-input"],
-    [data-testid="stDateInput"] [data-baseweb="base-input"] > div,
-    [data-testid="stDateInput"] input,
-    [data-testid="stDateInput"] input:hover,
-    [data-testid="stDateInput"] input:focus {{
-        background: {th['input_bg']} !important;
-        background-color: {th['input_bg']} !important;
-        color: {th['input_text']} !important;
-        -webkit-text-fill-color: {th['input_text']} !important;
-        opacity: 1 !important;
-        text-shadow: none !important;
-        caret-color: {th['input_text']} !important;
-        color-scheme: {th['color_scheme']} !important;
-    }}
-
-    /* Ép các lớp con của BaseWeb không quay về nền trắng mặc định. */
-    [data-testid="stDateInput"] [data-baseweb="input"] > div > div,
-    [data-testid="stDateInput"] [data-baseweb="input"] > div > div > div,
-    [data-testid="stDateInput"] [data-baseweb="base-input"] > div > div {{
-        background: {th['input_bg']} !important;
-        background-color: {th['input_bg']} !important;
-    }}
-
-    [data-testid="stDateInput"] input::placeholder,
-    [data-testid="stDateInput"] input::-webkit-input-placeholder {{
-        color: {th['placeholder']} !important;
-        -webkit-text-fill-color: {th['placeholder']} !important;
-        opacity: 1 !important;
-    }}
-
-    [data-testid="stDateInput"] [data-baseweb="input"] *,
-    [data-testid="stDateInput"] [data-baseweb="base-input"] * {{
-        color: {th['input_text']} !important;
-        -webkit-text-fill-color: {th['input_text']} !important;
-    }}
-
-    [data-testid="stDateInput"] [data-baseweb="input"],
-    [data-testid="stDateInput"] [data-baseweb="base-input"] {{
-        border: 1px solid {th['input_border']} !important;
-        border-radius: 10px !important;
-        box-shadow: none !important;
-    }}
-
-    [data-testid="stDateInput"] button,
-    [data-testid="stDateInput"] button svg {{
-        color: {th['muted']} !important;
-        fill: currentColor !important;
-        stroke: currentColor !important;
-        opacity: 1 !important;
-    }}
-
-    [data-testid="stDateInput"] button:hover {{
-        background: {th['slider_track']} !important;
-    }}
-    /* ---- ÉP MÀU TOÀN BỘ CON CỦA DATE INPUT (fix mất chữ ở dark mode) ---- */
-    [data-testid="stDateInput"] * {{
-        background-color: {th['input_bg']} !important;
-        color: {th['input_text']} !important;
-        -webkit-text-fill-color: {th['input_text']} !important;
-    }}
-
-    /* Placeholder rỗng (dd/mm/yyyy) khi chưa chọn ngày */
-    [data-testid="stDateInput"] input::placeholder,
-    [data-testid="stDateInput"] [aria-placeholder] {{
-        color: {th['placeholder']} !important;
-        -webkit-text-fill-color: {th['placeholder']} !important;
-        opacity: 1 !important;
-    }}
-
-    /* Icon lịch & nút xoá (x) không bị ăn theo màu nền */
-    [data-testid="stDateInput"] svg {{
-        fill: {th['muted']} !important;
-        stroke: {th['muted']} !important;
-        background: transparent !important;
-    }}
-
-    /* Viền + bo góc cho khung ngoài cùng */
-    [data-testid="stDateInput"] [data-baseweb="input"],
-    [data-testid="stDateInput"] [data-baseweb="base-input"] {{
-        border: 1px solid {th['input_border']} !important;
-        border-radius: 10px !important;
-    }}
     /* ---------- SELECTBOX ---------- */
     .stSelectbox [data-baseweb="select"],
     .stSelectbox [data-baseweb="select"] > div,
@@ -782,30 +670,14 @@ def parse_smart_amount(text: str):
     if suffix not in _SUFFIX_MULT:
         return None
 
-    if suffix == "":
-        # Số trần không có hậu tố: dấu , hoặc . đơn lẻ chỉ có thể là phân cách thập phân
-        # nếu theo sau là 1-2 chữ số; nhưng vì không có hậu tố nên số trần thường là số nguyên.
-        num_str_clean = num_str.replace(",", ".")
-    else:
-        # Có hậu tố (triệu/tỷ/k/tr...): dấu , hoặc . đều hiểu là dấu thập phân.
-        num_str_clean = num_str.replace(",", ".")
+    # Dấu , hoặc . đều hiểu là dấu thập phân (cả có hậu tố lẫn không).
+    num_str_clean = num_str.replace(",", ".")
 
     try:
         number = float(num_str_clean)
     except ValueError:
         return None
     return number * _SUFFIX_MULT[suffix]
-
-
-def is_bare_small_number(text: str):
-    if not text:
-        return None
-    t = text.strip().replace(",", "").replace(".", "")
-    if re.match(r"^\d+$", t):
-        n = float(t)
-        if 0 < n < 1_000_000:
-            return n
-    return None
 
 
 # ============================================================
@@ -894,7 +766,7 @@ def plotly_font(th):
 def render_donut_chart(th, principal, interest):
     fig = go.Figure(data=[go.Pie(
         labels=["Tiền gốc", "Tiền lãi"], values=[principal, max(interest, 0)], hole=0.64,
-        marker=dict(colors=[th["sapphire"], th["emerald"]], line=dict(color=th["app_bg"].split(" ")[2] if False else "rgba(0,0,0,0)", width=2)),
+        marker=dict(colors=[th["sapphire"], th["emerald"]], line=dict(color="rgba(0,0,0,0)", width=2)),
         textinfo="percent", textfont=dict(size=13, color="white"),
         hovertemplate="%{label}: %{value:,.0f} VNĐ (%{percent})<extra></extra>",
     )])
@@ -1123,28 +995,37 @@ with col_left:
 
         st.divider()
         st.markdown("**📅 Kỳ hạn & lãi suất**")
-        term_text = st.selectbox("Kỳ hạn gửi tiền", list(TERM_OPTIONS.keys()), index=0)
+        term_text = st.selectbox(
+            "Kỳ hạn gửi tiền", list(TERM_OPTIONS.keys()), index=0, key="term_text",
+        )
         term_months = TERM_OPTIONS[term_text]
 
-        term_rate = st.number_input("📈 Lãi suất có kỳ hạn (%/năm)", min_value=0.0, max_value=100.0,
-                                     value=None, step=0.1, format="%.2f", placeholder="Ví dụ: 5.0")
-        non_term_rate = st.number_input("📉 Lãi suất không kỳ hạn (%/năm)", min_value=0.0, max_value=100.0,
-                                         value=None, step=0.1, format="%.2f", placeholder="Ví dụ: 0.2")
-        loan_rate = st.number_input("🏦 Lãi suất vay cầm cố sổ (%/năm)", min_value=0.0, max_value=100.0,
-                                     value=None, step=0.1, format="%.2f", placeholder="Ví dụ: 8.0",
-                                     help="Dùng để so sánh: nếu cần tiền trước hạn, nên rút sổ hay vay cầm cố chính sổ đó?")
+        term_rate = st.number_input(
+            "📈 Lãi suất có kỳ hạn (%/năm)", min_value=0.0, max_value=100.0,
+            value=None, step=0.1, format="%.2f", placeholder="Ví dụ: 5.0", key="term_rate",
+        )
+        non_term_rate = st.number_input(
+            "📉 Lãi suất không kỳ hạn (%/năm)", min_value=0.0, max_value=100.0,
+            value=None, step=0.1, format="%.2f", placeholder="Ví dụ: 0.2", key="non_term_rate",
+        )
+        loan_rate = st.number_input(
+            "🏦 Lãi suất vay cầm cố sổ (%/năm)", min_value=0.0, max_value=100.0,
+            value=None, step=0.1, format="%.2f", placeholder="Ví dụ: 8.0", key="loan_rate",
+            help="Dùng để so sánh: nếu cần tiền trước hạn, nên rút sổ hay vay cầm cố chính sổ đó? "
+                 "Chỉ bắt buộc khi tình huống thực tế là rút trước hạn.",
+        )
 
         st.divider()
         st.markdown("**🗓️ Thời gian**")
-        start_date = st.date_input("Ngày gửi tiền", value=None, format="DD/MM/YYYY")
-        withdrawal_date = st.date_input("Ngày rút tiền", value=None, format="DD/MM/YYYY")
+        start_date = st.date_input("Ngày gửi tiền", value=None, format="DD/MM/YYYY", key="start_date")
+        withdrawal_date = st.date_input("Ngày rút tiền", value=None, format="DD/MM/YYYY", key="withdrawal_date")
 
         st.divider()
         st.markdown("**💵 Phương thức nhận lãi**")
         with st.container(key="toggle_method"):
             interest_method = st.radio(
-                "Phương thức (áp dụng khi gửi đủ kỳ hạn)", METHOD_OPTIONS,
-                index=None, horizontal=True, label_visibility="collapsed",
+                "Phương thức (áp dụng khi rút đúng ngày đáo hạn)", METHOD_OPTIONS,
+                index=None, horizontal=True, label_visibility="collapsed", key="interest_method",
             )
 
         st.write("")
@@ -1153,34 +1034,55 @@ with col_left:
         with st.container(key="reset_btn"):
             reset_clicked = st.button("↺ Làm mới toàn bộ", use_container_width=True)
 
-# ---- Xử lý reset ----
+# ---- Xử lý reset: xoá SẠCH toàn bộ input + kết quả + lỗi đã lưu ----
 if reset_clicked:
-    for k in ["so_tien_goc", "so_tien_text", "last_calc"]:
+    KEYS_TO_CLEAR = [
+        "so_tien_goc", "so_tien_text", "slider_amount",
+        "term_text", "term_rate", "non_term_rate", "loan_rate",
+        "start_date", "withdrawal_date", "interest_method",
+        "last_calc", "calc_errors",
+    ]
+    for k in KEYS_TO_CLEAR:
         st.session_state.pop(k, None)
     st.rerun()
 
-# ---- Xử lý khi bấm tính toán: validate + lưu snapshot vào session_state ----
+# ---- Xử lý khi bấm tính toán: validate CÓ ĐIỀU KIỆN theo đúng dữ liệu thực sự cần dùng ----
 if calc_clicked:
     errors = []
     principal_in = st.session_state.so_tien_goc
+
     if principal_in <= 0:
         errors.append("Vui lòng nhập **số tiền gửi** lớn hơn 0.")
     if term_months is None:
         errors.append("Vui lòng chọn **kỳ hạn gửi tiền**.")
-    if term_rate is None:
-        errors.append("Vui lòng nhập **lãi suất có kỳ hạn**.")
-    if non_term_rate is None:
-        errors.append("Vui lòng nhập **lãi suất không kỳ hạn**.")
-    if loan_rate is None:
-        errors.append("Vui lòng nhập **lãi suất vay cầm cố**.")
     if start_date is None:
         errors.append("Vui lòng chọn **ngày gửi tiền**.")
     if withdrawal_date is None:
         errors.append("Vui lòng chọn **ngày rút tiền**.")
     if start_date and withdrawal_date and withdrawal_date <= start_date:
         errors.append("**Ngày rút tiền** phải lớn hơn ngày gửi tiền.")
-    if term_months not in (0, None) and interest_method is None:
-        errors.append("Vui lòng chọn **phương thức nhận lãi**.")
+
+    # Lãi suất không kỳ hạn: luôn cần (không kỳ hạn / rút trước hạn / rút giữa kỳ tái tục)
+    if non_term_rate is None:
+        errors.append("Vui lòng nhập **lãi suất không kỳ hạn**.")
+
+    # Lãi suất có kỳ hạn: chỉ cần khi đã chọn kỳ hạn > 0
+    if term_months not in (0, None) and term_rate is None:
+        errors.append("Vui lòng nhập **lãi suất có kỳ hạn**.")
+
+    # Xác định trước (nếu đủ dữ liệu) đây có phải trường hợp rút trước hạn / đúng hạn hay không,
+    # để chỉ bắt buộc nhập lãi suất vay cầm cố / phương thức nhận lãi khi thực sự cần dùng đến.
+    maturity_check = None
+    if term_months not in (0, None) and start_date and withdrawal_date and withdrawal_date > start_date:
+        maturity_check = get_maturity_date(start_date, term_months)
+
+    needs_loan_rate = bool(maturity_check and withdrawal_date < maturity_check)
+    if needs_loan_rate and loan_rate is None:
+        errors.append("Vui lòng nhập **lãi suất vay cầm cố sổ** (cần để so sánh khi rút trước hạn).")
+
+    needs_method = bool(maturity_check and withdrawal_date == maturity_check)
+    if needs_method and interest_method is None:
+        errors.append("Vui lòng chọn **phương thức nhận lãi** (áp dụng khi rút đúng ngày đáo hạn).")
 
     if errors:
         st.session_state["calc_errors"] = errors
@@ -1330,9 +1232,12 @@ with col_right:
                                        date_cols=["Ngày gửi", "Ngày rút"])
 
                 with tab3:
-                    st.markdown("##### ⚔️ Rút trước hạn vs Vay cầm cố sổ tiết kiệm")
-                    battle_tab(TH, value_A, principal, interest, value_B, loan_cost, interest_if_hold,
-                               term_rate, loan_rate, days_remaining, maturity_date)
+                    if loan_rate is None:
+                        st.info("Nhập **lãi suất vay cầm cố sổ** ở Bảng điều khiển rồi tính lại để xem so sánh.")
+                    else:
+                        st.markdown("##### ⚔️ Rút trước hạn vs Vay cầm cố sổ tiết kiệm")
+                        battle_tab(TH, value_A, principal, interest, value_B, loan_cost, interest_if_hold,
+                                   term_rate, loan_rate, days_remaining, maturity_date)
 
             # ============ RÚT ĐÚNG HẠN ============
             elif exact_maturity:
@@ -1355,7 +1260,20 @@ with col_right:
                         "Số ngày": r["Số ngày"], "Tiền lãi (VNĐ)": round(r["Tiền lãi"]),
                     } for r in rows])
                     timeline = [{"label": f"Kỳ {r['Kỳ']}", "lai_ky": r["Tiền lãi"]} for r in rows]
+                elif interest_method == METHOD_OPTIONS[2]:
+                    interest = simple_interest(principal, term_rate, days)
+                    total = principal + interest
+                    detail_df = pd.DataFrame([{
+                        "Mốc": "Ngày đáo hạn (nhận gốc + lãi)", "Ngày": maturity_date,
+                        "Tiền gốc (VNĐ)": round(principal), "Tiền lãi (VNĐ)": round(interest),
+                        "Tổng nhận (VNĐ)": round(total),
+                    }])
+                    timeline = [{"label": "Đáo hạn", "lai_ky": interest}]
                 else:
+                    # Trường hợp hiếm gặp: đến ngày đáo hạn nhưng chưa chọn phương thức
+                    # (ví dụ dữ liệu cũ được lưu từ trước khi có validate) — mặc định về
+                    # "nhận lãi cuối kỳ" để không làm vỡ trang, đồng thời cảnh báo rõ.
+                    st.warning("⚠️ Chưa xác định phương thức nhận lãi, hệ thống tạm tính theo **nhận lãi cuối kỳ**.")
                     interest = simple_interest(principal, term_rate, days)
                     total = principal + interest
                     detail_df = pd.DataFrame([{
@@ -1379,11 +1297,12 @@ with col_right:
 
                     colA, colB = st.columns([1.3, 1])
                     with colA:
+                        method_label = interest_method if interest_method else "Nhận lãi cuối kỳ (mặc định)"
                         st.markdown(
                             f"""<div class="result-hero"><div class="rh-label">Tổng dòng tiền nhận được</div>
                             <div class="rh-value">{format_money(total)}</div>
                             <div class="rh-detail">Gốc {format_money(principal)} · Lãi {format_money(interest)}<br>
-                            Phương thức: {interest_method} · Lãi suất {term_rate:.2f}%/năm</div></div>""",
+                            Phương thức: {method_label} · Lãi suất {term_rate:.2f}%/năm</div></div>""",
                             unsafe_allow_html=True,
                         )
                         st.download_button("⬇️ Tải kết quả (CSV)", detail_df.to_csv(index=False).encode("utf-8-sig"),
@@ -1469,17 +1388,19 @@ with st.expander("📖 Hướng dẫn sử dụng"):
     st.markdown("""
     **1. Số tiền gửi** — gõ tự do (`50 triệu`, `1.5 tỷ`, `1,5 tỷ`, `200k`, `50tr`, `500000000`...), dùng thanh trượt, nút chọn nhanh dạng chip, hoặc nút ➕➖.
 
-    **2. Lãi suất** — nhập lãi suất có kỳ hạn, không kỳ hạn và lãi suất vay cầm cố.
+    **2. Lãi suất** — nhập lãi suất có kỳ hạn, không kỳ hạn và lãi suất vay cầm cố. Chỉ những lãi suất thực sự cần dùng cho kịch bản của bạn mới bị bắt buộc nhập.
 
     **3. Kỳ hạn** — chọn từ Không kỳ hạn đến 36 tháng.
 
-    **4. Phương thức nhận lãi** — Nhận lãi trước / hàng tháng / cuối kỳ (áp dụng khi gửi đủ kỳ hạn).
+    **4. Phương thức nhận lãi** — Nhận lãi trước / hàng tháng / cuối kỳ (chỉ áp dụng khi rút đúng ngày đáo hạn).
 
     **5. Rút trước hạn** — toàn bộ thời gian được tính lại theo lãi suất không kỳ hạn.
 
     **6. Tự động tái tục** — nếu rút sau đáo hạn, hệ thống chia nhiều kỳ theo đúng kỳ hạn ban đầu; kỳ cuối rút giữa chừng dùng lãi suất không kỳ hạn.
 
     **7. Kết quả được giữ nguyên** cho đến khi bạn bấm lại **TÍNH TOÁN NGAY** — chuyển tab, đổi giao diện sáng/tối không làm mất kết quả.
+
+    **8. Nút "Làm mới toàn bộ"** sẽ xoá sạch mọi lựa chọn (số tiền, kỳ hạn, lãi suất, ngày tháng, phương thức) để bắt đầu lại từ đầu.
     """)
 
 with st.expander("🧮 Công thức tính lãi"):
