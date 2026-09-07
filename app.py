@@ -470,7 +470,34 @@ def build_css(th: dict) -> str:
     [data-testid="stDateInput"] button:hover {{
         background: {th['slider_track']} !important;
     }}
+    /* ---- ÉP MÀU TOÀN BỘ CON CỦA DATE INPUT (fix mất chữ ở dark mode) ---- */
+    [data-testid="stDateInput"] * {{
+        background-color: {th['input_bg']} !important;
+        color: {th['input_text']} !important;
+        -webkit-text-fill-color: {th['input_text']} !important;
+    }}
 
+    /* Placeholder rỗng (dd/mm/yyyy) khi chưa chọn ngày */
+    [data-testid="stDateInput"] input::placeholder,
+    [data-testid="stDateInput"] [aria-placeholder] {{
+        color: {th['placeholder']} !important;
+        -webkit-text-fill-color: {th['placeholder']} !important;
+        opacity: 1 !important;
+    }}
+
+    /* Icon lịch & nút xoá (x) không bị ăn theo màu nền */
+    [data-testid="stDateInput"] svg {{
+        fill: {th['muted']} !important;
+        stroke: {th['muted']} !important;
+        background: transparent !important;
+    }}
+
+    /* Viền + bo góc cho khung ngoài cùng */
+    [data-testid="stDateInput"] [data-baseweb="input"],
+    [data-testid="stDateInput"] [data-baseweb="base-input"] {{
+        border: 1px solid {th['input_border']} !important;
+        border-radius: 10px !important;
+    }}
     /* ---------- SELECTBOX ---------- */
     .stSelectbox [data-baseweb="select"],
     .stSelectbox [data-baseweb="select"] > div,
