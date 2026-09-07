@@ -80,32 +80,6 @@ def svg_icon(name, size=20):
 
 
 def build_css(th: dict) -> str:
-    th_amber = th['amber']
-    th_app_bg = th['app_bg']
-    th_card_bg = th['card_bg']
-    th_chip_bg = th['chip_bg']
-    th_color_scheme = th['color_scheme']
-    th_crimson = th['crimson']
-    th_emerald = th['emerald']
-    th_expander_bg = th['expander_bg']
-    th_heading = th['heading']
-    th_input_bg = th['input_bg']
-    th_input_border = th['input_border']
-    th_input_text = th['input_text']
-    th_muted = th['muted']
-    th_navy = th['navy']
-    th_panel_bg = th['panel_bg']
-    th_panel_border = th['panel_border']
-    th_panel_shadow1 = th['panel_shadow1']
-    th_panel_shadow2 = th['panel_shadow2']
-    th_placeholder = th['placeholder']
-    th_sapphire = th['sapphire']
-    th_slider_track = th['slider_track']
-    th_table_bg = th['table_bg']
-    th_table_border = th['table_border']
-    th_table_head_bg = th['table_head_bg']
-    th_table_row_alt = th['table_row_alt']
-    th_text = th['text']
     return f"""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
@@ -119,86 +93,86 @@ def build_css(th: dict) -> str:
         font-family: 'Material Symbols Rounded', 'Material Symbols Outlined', 'Material Icons' !important;
     }}
 
-    .stApp {{ background: {th_app_bg}; color: {th_text}; }}
+    .stApp {{ background: {th['app_bg']}; color: {th['text']}; }}
     #MainMenu, footer {{ visibility: hidden; }}
 
     /* ---- Chữ mặc định toàn app ---- */
     .stApp, .stApp p, .stApp span, .stApp label, .stApp li,
     .stMarkdown, .stCaption, [data-testid="stMarkdownContainer"] {{
-        color: {th_text};
+        color: {th['text']};
     }}
-    h1, h2, h3, h4, h5, h6 {{ color: {th_heading} !important; }}
-    .stCaption, [data-testid="stCaptionContainer"] {{ color: {th_muted} !important; }}
+    h1, h2, h3, h4, h5, h6 {{ color: {th['heading']} !important; }}
+    .stCaption, [data-testid="stCaptionContainer"] {{ color: {th['muted']} !important; }}
 
     /* ---- Panels (container border=True) ---- */
     div[data-testid="stVerticalBlockBorderWrapper"] {{
         border-radius: 22px !important;
-        border: 1px solid {th_panel_border} !important;
-        background: {th_panel_bg} !important;
+        border: 1px solid {th['panel_border']} !important;
+        background: {th['panel_bg']} !important;
         backdrop-filter: blur(14px);
-        box-shadow: 10px 10px 26px {th_panel_shadow1}, -10px -10px 26px {th_panel_shadow2};
+        box-shadow: 10px 10px 26px {th['panel_shadow1']}, -10px -10px 26px {th['panel_shadow2']};
     }}
 
     .panel-title {{
-        font-size: 15.5px; font-weight: 800; color: {th_heading};
+        font-size: 15.5px; font-weight: 800; color: {th['heading']};
         display: flex; align-items: center; gap: 8px;
         margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.4px;
     }}
     .panel-title .pt-icon {{
         width: 26px; height: 26px; border-radius: 8px;
-        background: linear-gradient(135deg, {th_sapphire}, {th_navy});
+        background: linear-gradient(135deg, {th['sapphire']}, {th['navy']});
         color: white; display: flex; align-items: center; justify-content: center;
     }}
 
     /* ---- Inputs: text_input, number_input, date_input, selectbox, textarea ---- */
     .stTextInput input, .stNumberInput input, .stDateInput input,
     .stSelectbox div[data-baseweb="select"] > div, textarea {{
-        background: {th_input_bg} !important;
-        color: {th_input_text} !important;
-        border: 1px solid {th_input_border} !important;
+        background: {th['input_bg']} !important;
+        color: {th['input_text']} !important;
+        border: 1px solid {th['input_border']} !important;
         border-radius: 10px !important;
     }}
     .stTextInput input::placeholder, .stNumberInput input::placeholder,
-    .stDateInput input::placeholder {{ color: {th_placeholder} !important; }}
-    .stSelectbox div[data-baseweb="select"] span {{ color: {th_input_text} !important; }}
-    ul[data-baseweb="menu"] {{ background: {th_input_bg} !important; }}
-    ul[data-baseweb="menu"] li {{ color: {th_input_text} !important; }}
-    ul[data-baseweb="menu"] li:hover {{ background: {th_slider_track} !important; }}
+    .stDateInput input::placeholder {{ color: {th['placeholder']} !important; }}
+    .stSelectbox div[data-baseweb="select"] span {{ color: {th['input_text']} !important; }}
+    ul[data-baseweb="menu"] {{ background: {th['input_bg']} !important; }}
+    ul[data-baseweb="menu"] li {{ color: {th['input_text']} !important; }}
+    ul[data-baseweb="menu"] li:hover {{ background: {th['slider_track']} !important; }}
 
     /* ---- Slider ---- */
     div[data-testid="stSlider"] [data-baseweb="slider"] > div > div {{
-        background: {th_slider_track} !important;
+        background: {th['slider_track']} !important;
     }}
     div[data-testid="stSlider"] [role="slider"] {{
-        background-color: {th_emerald} !important;
-        border-color: {th_emerald} !important;
+        background-color: {th['emerald']} !important;
+        border-color: {th['emerald']} !important;
     }}
     div[data-testid="stSliderTickBarMin"], div[data-testid="stSliderTickBarMax"],
-    div[data-testid="stThumbValue"] {{ color: {th_muted} !important; }}
+    div[data-testid="stThumbValue"] {{ color: {th['muted']} !important; }}
 
     /* ---- Radio (segmented control) ---- */
-    div[role="radiogroup"] label {{ color: {th_text} !important; }}
+    div[role="radiogroup"] label {{ color: {th['text']} !important; }}
     .st-key-toggle_method div[role="radiogroup"] {{
-        background: {th_slider_track}; padding: 5px; border-radius: 14px; gap: 4px;
+        background: {th['slider_track']}; padding: 5px; border-radius: 14px; gap: 4px;
     }}
     .st-key-toggle_method label {{ border-radius: 10px !important; padding: 6px 10px !important; font-weight: 600 !important; }}
 
     /* ---- Quick-select chips ---- */
     .st-key-quick_chips .stButton>button, .st-key-adj_chips .stButton>button {{
         border-radius: 999px !important;
-        border: 1px solid {th_input_border} !important;
-        background: {th_chip_bg} !important;
-        color: {th_sapphire} !important; font-weight: 700 !important; font-size: 12.5px !important;
-        box-shadow: 3px 3px 8px {th_panel_shadow1}, -3px -3px 8px {th_panel_shadow2} !important;
+        border: 1px solid {th['input_border']} !important;
+        background: {th['chip_bg']} !important;
+        color: {th['sapphire']} !important; font-weight: 700 !important; font-size: 12.5px !important;
+        box-shadow: 3px 3px 8px {th['panel_shadow1']}, -3px -3px 8px {th['panel_shadow2']} !important;
         padding: 2px 4px !important;
     }}
     .st-key-quick_chips .stButton>button:hover, .st-key-adj_chips .stButton>button:hover {{
-        border-color: {th_emerald} !important; color: {th_emerald} !important;
+        border-color: {th['emerald']} !important; color: {th['emerald']} !important;
     }}
 
     /* ---- Nút chính ---- */
     .st-key-calc_btn .stButton>button {{
-        background: linear-gradient(135deg, {th_navy} 0%, {th_sapphire} 50%, #146356 100%) !important;
+        background: linear-gradient(135deg, {th['navy']} 0%, {th['sapphire']} 50%, #146356 100%) !important;
         background-size: 200% 200% !important;
         color: white !important; border: none !important; font-weight: 800 !important;
         border-radius: 14px !important; padding: 12px !important; font-size: 15px !important;
@@ -208,36 +182,36 @@ def build_css(th: dict) -> str:
     .st-key-calc_btn .stButton>button:hover {{ background-position: 100% 50% !important; transform: translateY(-2px) !important; }}
     .st-key-reset_btn .stButton>button, .st-key-theme_btn .stButton>button {{
         border-radius: 14px !important; font-weight: 700 !important;
-        background: {th_chip_bg} !important; color: {th_sapphire} !important;
-        border: 1px solid {th_input_border} !important;
+        background: {th['chip_bg']} !important; color: {th['sapphire']} !important;
+        border: 1px solid {th['input_border']} !important;
     }}
-    .stButton>button {{ color: {th_sapphire}; }}
+    .stButton>button {{ color: {th['sapphire']}; }}
     .st-key-calc_btn .stButton>button p {{ color: white !important; }}
 
     /* ---- Tabs ---- */
-    div[data-testid="stTabs"] button p {{ color: {th_muted}; font-weight: 600; }}
-    div[data-testid="stTabs"] button[aria-selected="true"] p {{ color: {th_sapphire}; font-weight: 800; }}
-    div[data-testid="stTabs"] div[data-baseweb="tab-highlight"] {{ background-color: {th_emerald} !important; }}
-    div[data-testid="stTabs"] div[data-baseweb="tab-border"] {{ background-color: {th_input_border} !important; }}
+    div[data-testid="stTabs"] button p {{ color: {th['muted']}; font-weight: 600; }}
+    div[data-testid="stTabs"] button[aria-selected="true"] p {{ color: {th['sapphire']}; font-weight: 800; }}
+    div[data-testid="stTabs"] div[data-baseweb="tab-highlight"] {{ background-color: {th['emerald']} !important; }}
+    div[data-testid="stTabs"] div[data-baseweb="tab-border"] {{ background-color: {th['input_border']} !important; }}
 
     /* ---- Expander ---- */
     div[data-testid="stExpander"] {{
-        background: {th_expander_bg} !important; border-radius: 16px !important;
-        border: 1px solid {th_panel_border} !important;
+        background: {th['expander_bg']} !important; border-radius: 16px !important;
+        border: 1px solid {th['panel_border']} !important;
     }}
-    div[data-testid="stExpander"] summary {{ color: {th_heading} !important; font-weight: 700; }}
-    div[data-testid="stExpander"] p, div[data-testid="stExpander"] li {{ color: {th_text} !important; }}
+    div[data-testid="stExpander"] summary {{ color: {th['heading']} !important; font-weight: 700; }}
+    div[data-testid="stExpander"] p, div[data-testid="stExpander"] li {{ color: {th['text']} !important; }}
 
     /* ---- Alert boxes (info/success/warning/error) ---- */
     div[data-testid="stAlert"] {{ border-radius: 14px !important; }}
-    div[data-testid="stAlert"] p {{ color: {th_text} !important; }}
+    div[data-testid="stAlert"] p {{ color: {th['text']} !important; }}
 
-    hr {{ opacity: 0.15; border-color: {th_input_border}; }}
+    hr {{ opacity: 0.15; border-color: {th['input_border']}; }}
 
     /* ================= HERO BANNER ================= */
     .hero-banner {{
         position: relative;
-        background: linear-gradient(120deg, {th_navy} 0%, {th_sapphire} 60%, #24507F 100%);
+        background: linear-gradient(120deg, {th['navy']} 0%, {th['sapphire']} 60%, #24507F 100%);
         border-radius: 24px; padding: 22px 30px 18px 30px; margin-bottom: 20px;
         overflow: hidden; box-shadow: 0 20px 45px rgba(11, 25, 44, 0.35);
     }}
@@ -245,7 +219,7 @@ def build_css(th: dict) -> str:
     .hero-badge {{
         display: inline-flex; align-items: center; gap: 6px;
         background: rgba(0, 210, 106, 0.15); border: 1px solid rgba(0,210,106,0.4);
-        color: {th_emerald}; padding: 5px 14px; border-radius: 999px;
+        color: {th['emerald']}; padding: 5px 14px; border-radius: 999px;
         font-size: 12.5px; font-weight: 700; letter-spacing: 0.3px;
     }}
     .hero-glow-icon {{
@@ -253,7 +227,7 @@ def build_css(th: dict) -> str:
         background: radial-gradient(circle at 30% 30%, rgba(0,210,106,0.35), rgba(30,62,98,0.6));
         display: flex; align-items: center; justify-content: center;
         box-shadow: 0 0 24px rgba(0,210,106,0.45), inset 0 0 12px rgba(255,255,255,0.15);
-        color: {th_emerald};
+        color: {th['emerald']};
     }}
     .hero-title {{ font-size: 26px; font-weight: 800; color: #FFFFFF !important; margin: 12px 0 2px 0; position: relative; z-index: 2; letter-spacing: -0.3px; }}
     .hero-sub {{ color: rgba(255,255,255,0.68) !important; font-size: 13.5px; position: relative; z-index: 2; }}
@@ -261,57 +235,57 @@ def build_css(th: dict) -> str:
     .ticker-track {{ display: flex; gap: 34px; white-space: nowrap; animation: ticker-scroll 18s linear infinite; }}
     @keyframes ticker-scroll {{ 0% {{ transform: translateX(0); }} 100% {{ transform: translateX(-50%); }} }}
     .ticker-item {{ color: rgba(255,255,255,0.85) !important; font-size: 12.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }}
-    .ticker-item .dot {{ width: 6px; height: 6px; border-radius: 50%; background: {th_emerald}; box-shadow: 0 0 8px {th_emerald}; }}
-    .ticker-item.warn .dot {{ background: {th_crimson}; box-shadow: 0 0 8px {th_crimson}; }}
-    .ticker-item.info .dot {{ background: {th_amber}; box-shadow: 0 0 8px {th_amber}; }}
+    .ticker-item .dot {{ width: 6px; height: 6px; border-radius: 50%; background: {th['emerald']}; box-shadow: 0 0 8px {th['emerald']}; }}
+    .ticker-item.warn .dot {{ background: {th['crimson']}; box-shadow: 0 0 8px {th['crimson']}; }}
+    .ticker-item.info .dot {{ background: {th['amber']}; box-shadow: 0 0 8px {th['amber']}; }}
 
     /* ================= KPI CARDS ================= */
     .kpi-card {{
         position: relative; overflow: hidden; border-radius: 20px; padding: 18px 18px 16px 18px;
-        background: {th_card_bg}; border: 1px solid {th_panel_border};
-        box-shadow: 8px 8px 18px {th_panel_shadow1}, -8px -8px 18px {th_panel_shadow2};
-        transition: transform 0.25s ease; --accent: {th_navy}; height: 100%;
+        background: {th['card_bg']}; border: 1px solid {th['panel_border']};
+        box-shadow: 8px 8px 18px {th['panel_shadow1']}, -8px -8px 18px {th['panel_shadow2']};
+        transition: transform 0.25s ease; --accent: {th['navy']}; height: 100%;
     }}
     .kpi-card:hover {{ transform: translateY(-4px); }}
     .kpi-card .kpi-bg-icon {{ position: absolute; top: -10px; right: -6px; opacity: 0.10; color: var(--accent); transform: scale(2.6); }}
     .kpi-card .kpi-label {{
-        font-size: 12px; font-weight: 700; color: {th_muted} !important;
+        font-size: 12px; font-weight: 700; color: {th['muted']} !important;
         text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
     }}
     .kpi-card .kpi-label .ic {{ color: var(--accent); }}
-    .kpi-card .kpi-value {{ font-size: 22px; font-weight: 800; color: {th_heading} !important; line-height: 1.15; position: relative; z-index: 2; }}
+    .kpi-card .kpi-value {{ font-size: 22px; font-weight: 800; color: {th['heading']} !important; line-height: 1.15; position: relative; z-index: 2; }}
     .kpi-card .kpi-note {{ margin-top: 9px; position: relative; z-index: 2; }}
     .kpi-chip {{ display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }}
-    .kpi-chip.pos {{ background: rgba(0,210,106,0.16); color: {th_emerald}; }}
-    .kpi-chip.neg {{ background: rgba(255,77,77,0.16); color: {th_crimson}; }}
-    .kpi-chip.warn {{ background: rgba(255,176,32,0.18); color: {th_amber}; }}
-    .kpi-navy {{ --accent: {th_sapphire}; }}
-    .kpi-emerald {{ --accent: {th_emerald}; }}
-    .kpi-crimson {{ --accent: {th_crimson}; }}
-    .kpi-amber {{ --accent: {th_amber}; }}
+    .kpi-chip.pos {{ background: rgba(0,210,106,0.16); color: {th['emerald']}; }}
+    .kpi-chip.neg {{ background: rgba(255,77,77,0.16); color: {th['crimson']}; }}
+    .kpi-chip.warn {{ background: rgba(255,176,32,0.18); color: {th['amber']}; }}
+    .kpi-navy {{ --accent: {th['sapphire']}; }}
+    .kpi-emerald {{ --accent: {th['emerald']}; }}
+    .kpi-crimson {{ --accent: {th['crimson']}; }}
+    .kpi-amber {{ --accent: {th['amber']}; }}
 
     /* ================= RESULT HERO ================= */
     .result-hero {{
         border-radius: 22px; padding: 24px 26px; color: white !important; position: relative; overflow: hidden;
-        background: linear-gradient(135deg, {th_navy} 0%, {th_sapphire} 100%);
+        background: linear-gradient(135deg, {th['navy']} 0%, {th['sapphire']} 100%);
         box-shadow: 0 18px 34px rgba(11,25,44,0.3);
     }}
-    .result-hero.crimson {{ background: linear-gradient(135deg, #7A1414 0%, {th_crimson} 100%); }}
-    .result-hero.amber {{ background: linear-gradient(135deg, #7A4B00 0%, {th_amber} 100%); }}
+    .result-hero.crimson {{ background: linear-gradient(135deg, #7A1414 0%, {th['crimson']} 100%); }}
+    .result-hero.amber {{ background: linear-gradient(135deg, #7A4B00 0%, {th['amber']} 100%); }}
     .result-hero * {{ color: white !important; }}
     .result-hero .rh-label {{ font-size: 13px; letter-spacing: 0.4px; opacity: 0.85; font-weight: 700; text-transform: uppercase; }}
     .result-hero .rh-value {{ font-size: 32px; font-weight: 800; margin: 6px 0 12px 0; }}
     .result-hero .rh-detail {{ font-size: 13.5px; opacity: 0.92; line-height: 1.8; }}
 
     /* ================= PROGRESS BAR ================= */
-    .progress-labels {{ display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 700; color: {th_muted} !important; margin-bottom: 6px; }}
+    .progress-labels {{ display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 700; color: {th['muted']} !important; margin-bottom: 6px; }}
     .progress-track {{
-        height: 12px; border-radius: 999px; background: {th_slider_track};
-        box-shadow: inset 3px 3px 6px {th_panel_shadow1}, inset -3px -3px 6px {th_panel_shadow2}; overflow: hidden;
+        height: 12px; border-radius: 999px; background: {th['slider_track']};
+        box-shadow: inset 3px 3px 6px {th['panel_shadow1']}, inset -3px -3px 6px {th['panel_shadow2']}; overflow: hidden;
     }}
     .progress-fill {{
         height: 100%; border-radius: 999px;
-        background: linear-gradient(90deg, {th_sapphire}, {th_emerald});
+        background: linear-gradient(90deg, {th['sapphire']}, {th['emerald']});
         box-shadow: 0 0 10px rgba(0,210,106,0.5); transition: width 0.4s ease;
     }}
 
@@ -319,44 +293,44 @@ def build_css(th: dict) -> str:
     .battle-wrap {{ display: flex; align-items: stretch; gap: 14px; }}
     .battle-card {{
         flex: 1; border-radius: 20px; padding: 20px; position: relative;
-        background: {th_card_bg}; border: 1.5px solid {th_panel_border};
-        box-shadow: 8px 8px 18px {th_panel_shadow1}, -8px -8px 18px {th_panel_shadow2};
+        background: {th['card_bg']}; border: 1.5px solid {th['panel_border']};
+        box-shadow: 8px 8px 18px {th['panel_shadow1']}, -8px -8px 18px {th['panel_shadow2']};
     }}
-    .battle-card.winner {{ border-color: {th_emerald}; box-shadow: 0 0 0 3px rgba(0,210,106,0.18); }}
-    .battle-card .bc-tag {{ font-size: 11.5px; font-weight: 800; text-transform: uppercase; color: {th_muted} !important; }}
-    .battle-card .bc-title {{ font-size: 15.5px; font-weight: 800; color: {th_heading} !important; margin: 4px 0 12px 0; }}
-    .battle-card .bc-value {{ font-size: 23px; font-weight: 800; color: {th_heading} !important; }}
-    .battle-card .bc-line {{ font-size: 12.5px; color: {th_muted} !important; margin-top: 4px; }}
+    .battle-card.winner {{ border-color: {th['emerald']}; box-shadow: 0 0 0 3px rgba(0,210,106,0.18); }}
+    .battle-card .bc-tag {{ font-size: 11.5px; font-weight: 800; text-transform: uppercase; color: {th['muted']} !important; }}
+    .battle-card .bc-title {{ font-size: 15.5px; font-weight: 800; color: {th['heading']} !important; margin: 4px 0 12px 0; }}
+    .battle-card .bc-value {{ font-size: 23px; font-weight: 800; color: {th['heading']} !important; }}
+    .battle-card .bc-line {{ font-size: 12.5px; color: {th['muted']} !important; margin-top: 4px; }}
     .battle-vs {{
         display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: white !important;
-        background: linear-gradient(135deg, {th_navy}, {th_sapphire}); width: 40px; height: 40px; border-radius: 50%;
+        background: linear-gradient(135deg, {th['navy']}, {th['sapphire']}); width: 40px; height: 40px; border-radius: 50%;
         box-shadow: 0 6px 14px rgba(11,25,44,0.3); align-self: center; flex-shrink: 0;
     }}
     .winner-crown {{ position: absolute; top: -10px; right: 16px; font-size: 20px; }}
     .verdict-box {{
         margin-top: 14px; padding: 14px 16px; border-radius: 14px;
         background: rgba(0,210,106,0.10); border: 1px solid rgba(0,210,106,0.3);
-        color: {th_emerald} !important; font-size: 13.5px; font-weight: 600; line-height: 1.6;
+        color: {th['emerald']} !important; font-size: 13.5px; font-weight: 600; line-height: 1.6;
     }}
-    .verdict-box.neg {{ background: rgba(255,77,77,0.10); border-color: rgba(255,77,77,0.3); color: {th_crimson} !important; }}
+    .verdict-box.neg {{ background: rgba(255,77,77,0.10); border-color: rgba(255,77,77,0.3); color: {th['crimson']} !important; }}
     .verdict-box b {{ color: inherit !important; }}
 
     /* ================= BADGES ================= */
     .badge-pill {{ display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 999px; font-size: 12.5px; font-weight: 700; margin-bottom: 10px; }}
-    .badge-pill.emerald {{ background: rgba(0,210,106,0.16); color: {th_emerald} !important; }}
-    .badge-pill.crimson {{ background: rgba(255,77,77,0.16); color: {th_crimson} !important; }}
-    .badge-pill.amber {{ background: rgba(255,176,32,0.2); color: {th_amber} !important; }}
+    .badge-pill.emerald {{ background: rgba(0,210,106,0.16); color: {th['emerald']} !important; }}
+    .badge-pill.crimson {{ background: rgba(255,77,77,0.16); color: {th['crimson']} !important; }}
+    .badge-pill.amber {{ background: rgba(255,176,32,0.2); color: {th['amber']} !important; }}
 
     /* ================= BẢNG DỮ LIỆU DẠNG HTML TỰ VẼ ================= */
-    .bank-table-wrap {{ overflow-x: auto; border-radius: 14px; border: 1px solid {th_table_border}; }}
-    table.bank-table {{ width: 100%; border-collapse: collapse; background: {th_table_bg}; font-size: 13px; }}
+    .bank-table-wrap {{ overflow-x: auto; border-radius: 14px; border: 1px solid {th['table_border']}; }}
+    table.bank-table {{ width: 100%; border-collapse: collapse; background: {th['table_bg']}; font-size: 13px; }}
     table.bank-table thead th {{
-        background: {th_table_head_bg}; color: {th_heading} !important; font-weight: 700;
-        text-align: left; padding: 10px 14px; border-bottom: 2px solid {th_table_border}; white-space: nowrap;
+        background: {th['table_head_bg']}; color: {th['heading']} !important; font-weight: 700;
+        text-align: left; padding: 10px 14px; border-bottom: 2px solid {th['table_border']}; white-space: nowrap;
     }}
-    table.bank-table tbody td {{ padding: 9px 14px; color: {th_text} !important; border-bottom: 1px solid {th_table_border}; white-space: nowrap; }}
-    table.bank-table tbody tr:nth-child(even) {{ background: {th_table_row_alt}; }}
-    table.bank-table tbody tr:hover {{ background: {th_slider_track}; }}
+    table.bank-table tbody td {{ padding: 9px 14px; color: {th['text']} !important; border-bottom: 1px solid {th['table_border']}; white-space: nowrap; }}
+    table.bank-table tbody tr:nth-child(even) {{ background: {th['table_row_alt']}; }}
+    table.bank-table tbody tr:hover {{ background: {th['slider_track']}; }}
 
     @media (min-width: 1000px) {{
         div[data-testid="column"]:first-child > div {{ position: sticky; top: 14px; }}
@@ -368,151 +342,164 @@ def build_css(th: dict) -> str:
 
     /* Native browser color scheme: tránh trình duyệt tự đổi màu chữ
        của input[type=date] khi app đang ở Dark Mode. */
-    :root {{ color-scheme: {th_color_scheme}; }}
-    html {{ color-scheme: {th_color_scheme} !important; }}
+    :root {{ color-scheme: {th['color_scheme']}; }}
+    html {{ color-scheme: {th['color_scheme']} !important; }}
 
     /* ---------- DATE INPUT ---------- */
     .stDateInput,
     .stDateInput > div,
     .stDateInput [data-baseweb="input"],
     .stDateInput [data-baseweb="input"] > div {{
-        background: {th_input_bg} !important;
+        background: {th['input_bg']} !important;
     }}
 
     .stDateInput input,
     .stDateInput input[type="date"],
     .stDateInput input[aria-label] {{
-        background-color: {th_input_bg} !important;
-        color: {th_input_text} !important;
-        -webkit-text-fill-color: {th_input_text} !important;
-        caret-color: {th_input_text} !important;
+        background-color: {th['input_bg']} !important;
+        color: {th['input_text']} !important;
+        -webkit-text-fill-color: {th['input_text']} !important;
+        caret-color: {th['input_text']} !important;
         opacity: 1 !important;
         text-shadow: none !important;
-        color-scheme: {th_color_scheme} !important;
+        color-scheme: {th['color_scheme']} !important;
     }}
 
     .stDateInput input::placeholder {{
-        color: {th_placeholder} !important;
-        -webkit-text-fill-color: {th_placeholder} !important;
+        color: {th['placeholder']} !important;
+        -webkit-text-fill-color: {th['placeholder']} !important;
         opacity: 1 !important;
     }}
 
     /* Nút xoá và icon lịch của DateInput */
     .stDateInput button,
     .stDateInput button svg {{
-        color: {th_muted} !important;
+        color: {th['muted']} !important;
         fill: currentColor !important;
         opacity: 1 !important;
     }}
     .stDateInput button:hover {{
-        background: {th_slider_track} !important;
+        background: {th['slider_track']} !important;
     }}
     .stDateInput input[type="date"]::-webkit-calendar-picker-indicator {{
         opacity: 1 !important;
         cursor: pointer;
-        filter: none !important;
+        filter: {('invert(1) brightness(1.7)' if False else 'none')};
     }}
 
     /* Popover / calendar của DateInput */
     div[data-baseweb="popover"],
     div[data-baseweb="calendar"],
     div[role="dialog"] {{
-        color-scheme: {th_color_scheme} !important;
+        color-scheme: {th['color_scheme']} !important;
     }}
     div[data-baseweb="popover"] [data-baseweb="calendar"],
     div[data-baseweb="calendar"] {{
-        background: {th_input_bg} !important;
-        color: {th_input_text} !important;
-        border-color: {th_input_border} !important;
+        background: {th['input_bg']} !important;
+        color: {th['input_text']} !important;
+        border-color: {th['input_border']} !important;
     }}
     div[data-baseweb="calendar"] *,
     div[data-baseweb="calendar"] button {{
-        color: {th_input_text} !important;
+        color: {th['input_text']} !important;
     }}
     div[data-baseweb="calendar"] button:hover {{
-        background: {th_slider_track} !important;
+        background: {th['slider_track']} !important;
     }}
 
     /* ========================================================
        DATE INPUT — FINAL OVERRIDE
-       Streamlit/BaseWeb đôi khi dùng input text cho date_input,
-       nên selector input[type=date] không bắt được.
-       Dùng data-testid + toàn bộ input descendants để ép màu.
+       BaseWeb/Streamlit có thể đặt nền ở wrapper thay vì input.
+       Vì vậy ép nền + màu trên toàn bộ cấu trúc của DateInput.
+       Mục tiêu Dark Mode: ô ngày tháng dùng cùng nền xanh đen
+       #1B2438 như ô lãi suất/số tiền.
        ======================================================== */
-    [data-testid="stDateInput"],
     [data-testid="stDateInput"] [data-baseweb="input"],
     [data-testid="stDateInput"] [data-baseweb="input"] > div,
     [data-testid="stDateInput"] [data-baseweb="base-input"],
+    [data-testid="stDateInput"] [data-baseweb="base-input"] > div,
     [data-testid="stDateInput"] input,
     [data-testid="stDateInput"] input:hover,
     [data-testid="stDateInput"] input:focus {{
-        background: {th_input_bg} !important;
-        background-color: {th_input_bg} !important;
-        color: {th_input_text} !important;
-        -webkit-text-fill-color: {th_input_text} !important;
+        background: {th['input_bg']} !important;
+        background-color: {th['input_bg']} !important;
+        color: {th['input_text']} !important;
+        -webkit-text-fill-color: {th['input_text']} !important;
         opacity: 1 !important;
         text-shadow: none !important;
-        caret-color: {th_input_text} !important;
-        color-scheme: {th_color_scheme} !important;
+        caret-color: {th['input_text']} !important;
+        color-scheme: {th['color_scheme']} !important;
+    }}
+
+    /* Ép các lớp con của BaseWeb không quay về nền trắng mặc định. */
+    [data-testid="stDateInput"] [data-baseweb="input"] > div > div,
+    [data-testid="stDateInput"] [data-baseweb="input"] > div > div > div,
+    [data-testid="stDateInput"] [data-baseweb="base-input"] > div > div {{
+        background: {th['input_bg']} !important;
+        background-color: {th['input_bg']} !important;
     }}
 
     [data-testid="stDateInput"] input::placeholder,
     [data-testid="stDateInput"] input::-webkit-input-placeholder {{
-        color: {th_placeholder} !important;
-        -webkit-text-fill-color: {th_placeholder} !important;
+        color: {th['placeholder']} !important;
+        -webkit-text-fill-color: {th['placeholder']} !important;
         opacity: 1 !important;
     }}
 
-    /* BaseWeb có thể đặt màu trực tiếp trên wrapper/children */
     [data-testid="stDateInput"] [data-baseweb="input"] *,
     [data-testid="stDateInput"] [data-baseweb="base-input"] * {{
-        color: {th_input_text} !important;
-        -webkit-text-fill-color: {th_input_text} !important;
+        color: {th['input_text']} !important;
+        -webkit-text-fill-color: {th['input_text']} !important;
     }}
 
-    [data-testid="stDateInput"] [data-baseweb="input"] {{
-        border: 1px solid {th_input_border} !important;
+    [data-testid="stDateInput"] [data-baseweb="input"],
+    [data-testid="stDateInput"] [data-baseweb="base-input"] {{
+        border: 1px solid {th['input_border']} !important;
         border-radius: 10px !important;
         box-shadow: none !important;
     }}
 
     [data-testid="stDateInput"] button,
     [data-testid="stDateInput"] button svg {{
-        color: {th_muted} !important;
+        color: {th['muted']} !important;
         fill: currentColor !important;
         stroke: currentColor !important;
         opacity: 1 !important;
+    }}
+
+    [data-testid="stDateInput"] button:hover {{
+        background: {th['slider_track']} !important;
     }}
 
     /* ---------- SELECTBOX ---------- */
     .stSelectbox [data-baseweb="select"],
     .stSelectbox [data-baseweb="select"] > div,
     .stSelectbox [data-baseweb="select"] > div > div {{
-        background: {th_input_bg} !important;
-        color: {th_input_text} !important;
-        border-color: {th_input_border} !important;
+        background: {th['input_bg']} !important;
+        color: {th['input_text']} !important;
+        border-color: {th['input_border']} !important;
     }}
     .stSelectbox [data-baseweb="select"] input {{
-        color: {th_input_text} !important;
-        -webkit-text-fill-color: {th_input_text} !important;
+        color: {th['input_text']} !important;
+        -webkit-text-fill-color: {th['input_text']} !important;
     }}
     .stSelectbox [data-baseweb="select"] span,
     .stSelectbox [data-baseweb="select"] div[role="option"] {{
-        color: {th_input_text} !important;
+        color: {th['input_text']} !important;
     }}
     ul[data-baseweb="menu"],
     ul[data-baseweb="menu"] > li,
     div[data-baseweb="popover"] ul {{
-        background: {th_input_bg} !important;
-        color: {th_input_text} !important;
+        background: {th['input_bg']} !important;
+        color: {th['input_text']} !important;
     }}
     ul[data-baseweb="menu"] li[aria-selected="true"],
     ul[data-baseweb="menu"] li:hover {{
-        background: {th_slider_track} !important;
-        color: {th_input_text} !important;
+        background: {th['slider_track']} !important;
+        color: {th['input_text']} !important;
     }}
     .stSelectbox svg {{
-        color: {th_muted} !important;
+        color: {th['muted']} !important;
         fill: currentColor !important;
     }}
 
@@ -523,51 +510,51 @@ def build_css(th: dict) -> str:
     .stTextArea textarea,
     .stTextInput input,
     .stNumberInput input {{
-        background: {th_input_bg} !important;
-        color: {th_input_text} !important;
-        -webkit-text-fill-color: {th_input_text} !important;
-        border-color: {th_input_border} !important;
+        background: {th['input_bg']} !important;
+        color: {th['input_text']} !important;
+        -webkit-text-fill-color: {th['input_text']} !important;
+        border-color: {th['input_border']} !important;
         opacity: 1 !important;
     }}
     .stTextInput input::placeholder,
     .stNumberInput input::placeholder,
     .stTextArea textarea::placeholder {{
-        color: {th_placeholder} !important;
-        -webkit-text-fill-color: {th_placeholder} !important;
+        color: {th['placeholder']} !important;
+        -webkit-text-fill-color: {th['placeholder']} !important;
         opacity: 1 !important;
     }}
 
     /* ---------- SLIDER ---------- */
-    div[data-testid="stSlider"] {{ color: {th_text} !important; }}
+    div[data-testid="stSlider"] {{ color: {th['text']} !important; }}
     div[data-testid="stSlider"] label,
     div[data-testid="stSlider"] p,
     div[data-testid="stSlider"] span {{
-        color: {th_text} !important;
+        color: {th['text']} !important;
     }}
     div[data-testid="stSlider"] [data-baseweb="slider"] > div {{
         background: transparent !important;
     }}
     div[data-testid="stSlider"] [data-baseweb="slider"] > div > div {{
-        background: {th_slider_track} !important;
+        background: {th['slider_track']} !important;
     }}
     div[data-testid="stSlider"] [role="slider"] {{
-        background: {th_emerald} !important;
-        border: 2px solid {th_emerald} !important;
-        box-shadow: 0 0 0 3px {th_slider_track} !important;
+        background: {th['emerald']} !important;
+        border: 2px solid {th['emerald']} !important;
+        box-shadow: 0 0 0 3px {th['slider_track']} !important;
     }}
     div[data-testid="stSlider"] [data-testid="stThumbValue"],
     div[data-testid="stSlider"] [data-testid="stSliderTickBarMin"],
     div[data-testid="stSlider"] [data-testid="stSliderTickBarMax"] {{
-        color: {th_muted} !important;
-        -webkit-text-fill-color: {th_muted} !important;
+        color: {th['muted']} !important;
+        -webkit-text-fill-color: {th['muted']} !important;
     }}
 
     /* ---------- BUTTON ---------- */
     .stButton > button,
     .stDownloadButton > button {{
-        color: {th_sapphire} !important;
-        background: {th_chip_bg} !important;
-        border: 1px solid {th_input_border} !important;
+        color: {th['sapphire']} !important;
+        background: {th['chip_bg']} !important;
+        border: 1px solid {th['input_border']} !important;
         opacity: 1 !important;
     }}
     .stButton > button p,
@@ -579,8 +566,8 @@ def build_css(th: dict) -> str:
     }}
     .stButton > button:hover,
     .stDownloadButton > button:hover {{
-        border-color: {th_emerald} !important;
-        color: {th_emerald} !important;
+        border-color: {th['emerald']} !important;
+        color: {th['emerald']} !important;
     }}
     .st-key-calc_btn .stButton > button,
     .st-key-calc_btn .stButton > button p,
@@ -593,105 +580,48 @@ def build_css(th: dict) -> str:
     div[data-testid="stTabs"] button,
     div[data-testid="stTabs"] button p,
     div[data-testid="stTabs"] button span {{
-        color: {th_text} !important;
+        color: {th['text']} !important;
     }}
     div[data-testid="stTabs"] button[aria-selected="true"],
     div[data-testid="stTabs"] button[aria-selected="true"] p {{
-        color: {th_sapphire} !important;
+        color: {th['sapphire']} !important;
     }}
     div[data-testid="stExpander"] summary,
     div[data-testid="stExpander"] summary span {{
-        color: {th_heading} !important;
+        color: {th['heading']} !important;
     }}
     div[role="radiogroup"] label,
     div[role="radiogroup"] label p,
     div[role="radiogroup"] label span {{
-        color: {th_text} !important;
+        color: {th['text']} !important;
     }}
 
     /* ---------- BẢNG HTML ---------- */
     .bank-table-wrap {{
-        background: {th_table_bg} !important;
-        border-color: {th_table_border} !important;
+        background: {th['table_bg']} !important;
+        border-color: {th['table_border']} !important;
     }}
     table.bank-table,
     table.bank-table thead,
     table.bank-table tbody {{
-        background: {th_table_bg} !important;
-        color: {th_text} !important;
+        background: {th['table_bg']} !important;
+        color: {th['text']} !important;
     }}
     table.bank-table thead th {{
-        background: {th_table_head_bg} !important;
-        color: {th_heading} !important;
-        border-color: {th_table_border} !important;
+        background: {th['table_head_bg']} !important;
+        color: {th['heading']} !important;
+        border-color: {th['table_border']} !important;
     }}
     table.bank-table tbody td {{
         background: transparent !important;
-        color: {th_text} !important;
-        border-color: {th_table_border} !important;
+        color: {th['text']} !important;
+        border-color: {th['table_border']} !important;
     }}
     table.bank-table tbody tr:nth-child(even) td {{
-        background: {th_table_row_alt} !important;
+        background: {th['table_row_alt']} !important;
     }}
     table.bank-table tbody tr:hover td {{
-        background: {th_slider_track} !important;
-    }}
-
-    /* ========================================================
-       FINAL HARD OVERRIDE — DATE INPUT / BASEWEB
-       Một số bản Streamlit render DateInput bằng input text +
-       nhiều wrapper BaseWeb. Ép màu trên chính input và wrapper.
-       ======================================================== */
-    [data-testid="stDateInput"] [data-baseweb="input"],
-    [data-testid="stDateInput"] [data-baseweb="base-input"],
-    [data-testid="stDateInput"] [data-baseweb="input"] > div,
-    [data-testid="stDateInput"] [data-baseweb="base-input"] > div {{
-        background-color: {th_input_bg} !important;
-        background: {th_input_bg} !important;
-        border-color: {th_input_border} !important;
-        color: {th_input_text} !important;
-        color-scheme: {th_color_scheme} !important;
-    }}
-
-    [data-testid="stDateInput"] input,
-    [data-testid="stDateInput"] input[type="text"],
-    [data-testid="stDateInput"] input[type="date"] {{
-        background-color: {th_input_bg} !important;
-        background: {th_input_bg} !important;
-        color: {th_input_text} !important;
-        -webkit-text-fill-color: {th_input_text} !important;
-        caret-color: {th_input_text} !important;
-        opacity: 1 !important;
-        color-scheme: {th_color_scheme} !important;
-        border: 0 !important;
-        box-shadow: none !important;
-    }}
-
-    [data-testid="stDateInput"] input::placeholder,
-    [data-testid="stDateInput"] input::-webkit-input-placeholder {{
-        color: {th_placeholder} !important;
-        -webkit-text-fill-color: {th_placeholder} !important;
-        opacity: 1 !important;
-    }}
-
-    [data-testid="stDateInput"] button {{
-        background: transparent !important;
-        color: {th_muted} !important;
-        opacity: 1 !important;
-    }}
-
-    [data-testid="stDateInput"] button svg {{
-        color: {th_muted} !important;
-        fill: currentColor !important;
-        stroke: currentColor !important;
-        opacity: 1 !important;
-    }}
-
-    /* Native date/calendar popup */
-    [data-baseweb="popover"],
-    [data-baseweb="popover"] *,
-    [role="dialog"] {{
-        color-scheme: {th_color_scheme} !important;
+        background: {th['slider_track']} !important;
     }}
 
 </style>
