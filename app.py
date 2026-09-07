@@ -407,6 +407,57 @@ def build_css(th: dict) -> str:
         background: {th['slider_track']} !important;
     }}
 
+    /* ========================================================
+       DATE INPUT — FINAL OVERRIDE
+       Streamlit/BaseWeb đôi khi dùng input text cho date_input,
+       nên selector input[type=date] không bắt được.
+       Dùng data-testid + toàn bộ input descendants để ép màu.
+       ======================================================== */
+    [data-testid="stDateInput"],
+    [data-testid="stDateInput"] [data-baseweb="input"],
+    [data-testid="stDateInput"] [data-baseweb="input"] > div,
+    [data-testid="stDateInput"] [data-baseweb="base-input"],
+    [data-testid="stDateInput"] input,
+    [data-testid="stDateInput"] input:hover,
+    [data-testid="stDateInput"] input:focus {
+        background: {th['input_bg']} !important;
+        background-color: {th['input_bg']} !important;
+        color: {th['input_text']} !important;
+        -webkit-text-fill-color: {th['input_text']} !important;
+        opacity: 1 !important;
+        text-shadow: none !important;
+        caret-color: {th['input_text']} !important;
+        color-scheme: {th['color_scheme']} !important;
+    }
+
+    [data-testid="stDateInput"] input::placeholder,
+    [data-testid="stDateInput"] input::-webkit-input-placeholder {
+        color: {th['placeholder']} !important;
+        -webkit-text-fill-color: {th['placeholder']} !important;
+        opacity: 1 !important;
+    }
+
+    /* BaseWeb có thể đặt màu trực tiếp trên wrapper/children */
+    [data-testid="stDateInput"] [data-baseweb="input"] *,
+    [data-testid="stDateInput"] [data-baseweb="base-input"] * {
+        color: {th['input_text']} !important;
+        -webkit-text-fill-color: {th['input_text']} !important;
+    }
+
+    [data-testid="stDateInput"] [data-baseweb="input"] {
+        border: 1px solid {th['input_border']} !important;
+        border-radius: 10px !important;
+        box-shadow: none !important;
+    }
+
+    [data-testid="stDateInput"] button,
+    [data-testid="stDateInput"] button svg {
+        color: {th['muted']} !important;
+        fill: currentColor !important;
+        stroke: currentColor !important;
+        opacity: 1 !important;
+    }
+
     /* ---------- SELECTBOX ---------- */
     .stSelectbox [data-baseweb="select"],
     .stSelectbox [data-baseweb="select"] > div,
