@@ -348,7 +348,8 @@ def build_css(th: dict) -> str:
     [data-testid="stDateInput"] * {{
         background-color: {th['input_bg']} !important;
         color: {th['input_text']} !important;
-        -webkit-text-fill-color: {th['input_text']} !important;
+        -webkit-text-fill-color:
+        {th['input_text']} !important;
     }}
     [data-testid="stDateInput"] input::placeholder,
     [data-testid="stDateInput"] input::-webkit-input-placeholder {{
@@ -385,7 +386,6 @@ def build_css(th: dict) -> str:
     div[data-baseweb="calendar"] button:hover {{
         background: {th['slider_track']} !important;
     }}
-
     /* ---------- SELECTBOX ---------- */
     .stSelectbox [data-baseweb="select"],
     .stSelectbox [data-baseweb="select"] > div,
@@ -463,7 +463,6 @@ def build_css(th: dict) -> str:
         color: {th['muted']} !important;
         -webkit-text-fill-color: {th['muted']} !important;
     }}
-
     /* ---------- BUTTON ---------- */
     .stButton > button,
     .stDownloadButton > button {{
@@ -636,7 +635,6 @@ def render_html_table(df: pd.DataFrame, currency_cols=None, date_cols=None):
     </div>
     """
     st.markdown(html, unsafe_allow_html=True)
-
 
 # ============================================================
 # Ô NHẬP TIỀN THÔNG MINH — hỗ trợ: 500000000 / 500 triệu / 1.5 tỷ / 1,5 tỷ / 200k / 50tr
@@ -1049,7 +1047,7 @@ with col_left:
                       ("➖1tr", -1_000_000), ("➖10tr", -10_000_000), ("➖50tr", -50_000_000)]
             for i, (nhan, delta) in enumerate(deltas):
                 ac[i % 3].button(nhan, key=f"delta_{delta}", use_container_width=True,
-                                  on_click=_set_amount, args=(st.session_state.so_tien_goc + delta,))
+                                 on_click=_set_amount, args=(st.session_state.so_tien_goc + delta,))
 
         st.divider()
         st.markdown("**📅 Kỳ hạn & lãi suất**")
@@ -1152,7 +1150,6 @@ if calc_clicked:
             start_date=start_date, withdrawal_date=withdrawal_date,
             interest_method=interest_method,
         )
-
 
 # ============================================================
 # CỘT PHẢI — HIỂN THỊ KẾT QUẢ (đọc từ session_state, không phụ thuộc rerun do UI khác)
@@ -1481,11 +1478,4 @@ with st.expander("🧮 Công thức tính lãi"):
     st.markdown("""
     **Tiền lãi = Tiền gốc × Lãi suất năm × Số ngày / 365**
 
-    **Tổng tiền nhận = Tiền gốc + Tiền lãi**
-
-    - Rút trước hạn (hoặc rút giữa một kỳ tái tục) → dùng lãi suất không kỳ hạn.
-    - Đến hạn không rút → tự động tái tục đúng kỳ hạn ban đầu (lãi nhập gốc).
-    """)
-
-st.divider()
-st.caption("🏦 Hệ thống mô phỏng tính tiền gửi tiết kiệm | Streamlit + Plotly | Hỗ trợ chế độ Sáng/Tối")
+    **Tổng tiền nhận = Tiền gốc + Tiền lãi
